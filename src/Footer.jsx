@@ -1,5 +1,12 @@
 import React from "react";
 
-function Footer() {}
+function Footer() {
+    const year = new Date().getFullYear()
+  return (
+    <footer>
+      <p>Copyright © xGabaDev {year}</p>
+    </footer>
+  );
+}
 
 export default Footer;
