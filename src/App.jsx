@@ -9,13 +9,33 @@ function App() {
 
   function addNote(newNote) {
     console.log(newNote);
+    setNotes((prevNotes) => {
+      return [...prevNotes, newNote];
+    });
+    console.log(notes);
+  }
+
+  function deleteNote(noteId) {
+    setNotes((prevNotes)=> {
+      return (prevNotes.filter((note, index)=>{return index !== noteId}))
+    })
   }
 
   return (
     <div>
       <Header />
       <CreateArea onAdd={addNote} />
-      <Note />
+      {notes.map((note, index) => {
+        return (
+          <Note
+            key={index}
+            id={index}
+            title={note.title}
+            content={note.content}
+            delete={deleteNote}
+          />
+        );
+      })}
       <Footer />
     </div>
   );
