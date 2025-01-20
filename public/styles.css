@@ -34,7 +34,7 @@ form {
   background-color: aqua;
   position: relative;
   margin: 30px auto 20px auto;
-  width: 400px;
+  width: 500px;
   padding: 15px;
   border-radius: 10px;
   box-shadow: 0 1px 5px rgb(138, 137, 137);
@@ -45,24 +45,65 @@ form textarea {
   background-color: inherit;
   color: white;
   font-family: inherit;
-  font-size: 1.3em;
+  font-size: 1.5em;
   width: 100%;
   border: none;
   resize: none;
   outline: none;
 }
 
+form textarea {
+  height: 90px;
+  font-size: 1.3em;
+}
+
 form button {
   background: #cd53dd;
   position: absolute;
   right: 15px;
-  bottom: -5px;
+  bottom: -15px;
   border: none;
   outline: none;
   font-family: inherit;
   border-radius: 50%;
   width: 40px;
   height: 40px;
-  cursor:pointer;
+  cursor: pointer;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.note {
+  font-weight: 100;
+  background-color: aqua;
+  color: rgb(88, 88, 88);
+  float: left;
+  width: 320px;
+  padding: 15px;
+  margin: 20px;
+  border-radius: 10px;
+  box-shadow: 0 1px 5px rgb(138, 137, 137);
+}
+
+.note h1 {
+  font-size: 1.3em;
+  margin-bottom: 5px;
+}
+
+.note p {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  overflow-wrap: break-word;
+}
+
+.note button {
+  background-color: #cd53dd;
+  font-family: inherit;
+  position: relative;
+  float: right;
+  border: none;
+  border-radius: 25%;
+  padding: 5px;
+  height: 30px;
+  width: auto;
+  bottom: -25px;
 }
