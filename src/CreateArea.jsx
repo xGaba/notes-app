@@ -11,7 +11,21 @@ function CreateArea(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    props.onAdd(note);
+    fetch("http://localhost:3000/note-app", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(note),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        props.onAdd(data);
+      })
+      .catch((error) => {
+        console.log("Error: ", error);
+      });
+
     setNote({ title: "", content: "" });
   }
 

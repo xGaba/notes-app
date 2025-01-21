@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import CreateArea from "./CreateArea";
@@ -7,18 +7,34 @@ import Note from "./Note";
 function App() {
   const [notes, setNotes] = useState([]);
 
+  useEffect(() => {
+    fetch("http://localhost:3000/notes")
+      .then((response) => response.json())
+      .then((data) => {
+        setNotes(data);
+      })
+      .catch((error) => console.log("Error fetching notes: ", error));
+  });
+
   function addNote(newNote) {
-    console.log(newNote);
-    setNotes((prevNotes) => {
-      return [...prevNotes, newNote];
-    });
-    console.log(notes);
+    setNotes((prevNotes)=> {
+      return [...prevNotes, newNote]
+    })
   }
 
-  function deleteNote(noteId) {
-    setNotes((prevNotes)=> {
-      return (prevNotes.filter((note, index)=>{return index !== noteId}))
+  function deleteNote(id) {
+    fetch(`http://localhost:3000/notes/${id}`, {
+      method: "DELETE",
     })
+      .then((response) => response.json())
+      .then(() => {
+        setNotes((prevNotes) => {
+          return prevNotes.filter((note) => {
+            return note.id !== id;
+          });
+        });
+      })
+      .catch((error) => console.log("Error deleting note: ", error));
   }
 
   return (
@@ -29,7 +45,7 @@ function App() {
         return (
           <Note
             key={index}
-            id={index}
+            id={note.id}
             title={note.title}
             content={note.content}
             delete={deleteNote}
