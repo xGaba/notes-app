@@ -3,6 +3,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import CreateArea from "./CreateArea";
 import Note from "./Note";
+import RegisterPage from "./RegisterPage";
 
 function App() {
   const [notes, setNotes] = useState([]);
@@ -40,7 +41,8 @@ function App() {
   return (
     <div>
       <Header />
-      <CreateArea onAdd={addNote} />
+      <RegisterPage />
+      {/* <CreateArea onAdd={addNote} />
       {notes.map((note, index) => {
         return (
           <Note
@@ -51,7 +53,7 @@ function App() {
             delete={deleteNote}
           />
         );
-      })}
+      })} */}
       <Footer />
     </div>
   );
