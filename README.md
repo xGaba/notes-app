@@ -27,7 +27,7 @@ A simple and intuitive note-taking app built with **React** and **PostgreSQL** t
 Here are some screenshots of the app:
 
 ![Screenshot 1](https://i.postimg.cc/ZRK9yRWS/image.png)
-![Screenshot 2](https://i.postimg.cc/J46t9mY6/image.png)
+![Screenshot 2]([image.png](https://postimg.cc/TpbRb86g))
 
 ---
 
