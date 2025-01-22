@@ -1,13 +1,18 @@
-import env from "dotenv";
 import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
 import session from "express-session";
 import cors from "cors";
+import passport from "passport";
+import { Strategy } from "passport-local";
+import dotenv from "dotenv";
+import { hash } from "crypto";
+import bcryptjs from "bcryptjs";
 
 const app = express();
 const port = 3000;
-env.config();
+dotenv.config();
+const saltRounds = 10;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -18,10 +23,13 @@ app.use(
   session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: { secure: false },
   })
 );
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 const db = new pg.Client({
   user: process.env.PG_USER,
@@ -42,6 +50,8 @@ app.get("/notes", async (req, res) => {
   }
 });
 
+app.get("/login", (req, res) => {});
+
 app.post("/note-app", async (req, res) => {
   const { title, content } = req.body;
   try {
@@ -56,12 +66,50 @@ app.post("/note-app", async (req, res) => {
   }
 });
 
-app.delete("/notes/:id", async (req, res) => {
-  console.log(req.params.id)
+app.post("/register", async (req, res) => {
+  const { email, password } = req.body;
+
   try {
-    const result = await db.query("DELETE FROM notes WHERE id = $1 RETURNING *", [
-      req.params.id,
+    const result = await db.query("SELECT * FROM users WHERE email = $1", [
+      email,
     ]);
+    if (result.rows.length > 0) {
+      return res.json({ success: false, message: "Incorrect credentials" });
+    } else {
+      bcryptjs.hash(password, saltRounds, async (error, hash) => {
+        if (error) {
+          res.json({ success: false, message: "Error hashing the password" });
+        } else {
+          const result = await db.query(
+            "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *",
+            [email, hash]
+          );
+          const user = result.rows[0];
+          req.login(user, (error) => {
+            if (error) {
+              return res.json({
+                success: false,
+                message: "Error logging the user",
+              });
+            } else {
+              return res.json({success: true, message: "User registres successfully"})
+            }
+          });
+        }
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.delete("/notes/:id", async (req, res) => {
+  console.log(req.params.id);
+  try {
+    const result = await db.query(
+      "DELETE FROM notes WHERE id = $1 RETURNING *",
+      [req.params.id]
+    );
     if (result.rowCount > 0) {
       res.status(200).json({ message: "Note deleted" });
     } else {
@@ -69,8 +117,16 @@ app.delete("/notes/:id", async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.status(500).send("Erro deleting the note")
+    res.status(500).send("Erro deleting the note");
   }
+});
+
+passport.serializeUser((user, cb) => {
+  cb(null, user);
+});
+
+passport.deserializeUser((user, cb) => {
+  cb(null, user);
 });
 
 app.listen(port, () => {
