@@ -1,35 +1,19 @@
 import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
-import session from "express-session";
 import cors from "cors";
-import passport from "passport";
-import { Strategy } from "passport-local";
 import dotenv from "dotenv";
-import { hash } from "crypto";
 import bcryptjs from "bcryptjs";
 
 const app = express();
 const port = 3000;
 dotenv.config();
-const saltRounds = 10;
+const saltRounds = process.env.SALTROUND;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(cors());
-
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false },
-  })
-);
-
-app.use(passport.initialize());
-app.use(passport.session());
 
 const db = new pg.Client({
   user: process.env.PG_USER,
@@ -49,8 +33,6 @@ app.get("/notes", async (req, res) => {
     res.status(500).send("Error al recuperar las notas");
   }
 });
-
-app.get("/login", (req, res) => {});
 
 app.post("/note-app", async (req, res) => {
   const { title, content } = req.body;
@@ -92,7 +74,10 @@ app.post("/register", async (req, res) => {
                 message: "Error logging the user",
               });
             } else {
-              return res.json({success: true, message: "User registres successfully"})
+              return res.json({
+                success: true,
+                message: "User registres successfully",
+              });
             }
           });
         }
@@ -119,14 +104,6 @@ app.delete("/notes/:id", async (req, res) => {
     console.log(error);
     res.status(500).send("Erro deleting the note");
   }
-});
-
-passport.serializeUser((user, cb) => {
-  cb(null, user);
-});
-
-passport.deserializeUser((user, cb) => {
-  cb(null, user);
 });
 
 app.listen(port, () => {
