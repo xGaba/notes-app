@@ -4,6 +4,8 @@ import Footer from "./Footer";
 import CreateArea from "./CreateArea";
 import Note from "./Note";
 import RegisterPage from "./RegisterPage";
+import LoginPage from "./LoginPage";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   const [notes, setNotes] = useState([]);
@@ -18,9 +20,9 @@ function App() {
   });
 
   function addNote(newNote) {
-    setNotes((prevNotes)=> {
-      return [...prevNotes, newNote]
-    })
+    setNotes((prevNotes) => {
+      return [...prevNotes, newNote];
+    });
   }
 
   function deleteNote(id) {
@@ -41,7 +43,13 @@ function App() {
   return (
     <div>
       <Header />
-      <RegisterPage />
+      <Router>
+        <Routes>
+          <Route path="/" element={<RegisterPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/note" element={<CreateArea />} />
+        </Routes>
+      </Router>
       {/* <CreateArea onAdd={addNote} />
       {notes.map((note, index) => {
         return (
