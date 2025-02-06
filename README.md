@@ -48,3 +48,4 @@ Here are some screenshots of the app:
 - [Node.js](https://nodejs.org/)
 - [PostgreSQL](https://www.postgresql.org/)
 - [pgAdmin](https://www.pgadmin.org/)
+- [Passport.js](https://www.passportjs.org/)
