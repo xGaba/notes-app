@@ -10,7 +10,7 @@ A simple and intuitive note-taking app built with **React** and **PostgreSQL** t
 - **Persistent Storage**: Notes are saved to a **PostgreSQL** database, ensuring they are stored even after restarting the app.
 - **Responsive Design**: The app looks great on all devices.
 - **Edit & Delete**: Update or remove notes whenever you need.
-- **Authentication**: Under construction 🚧👷🏻‍♂️
+- **Authentication & styling with TailwindCSS**: Under construction 🚧👷🏻‍♂️
 
 ---
 
